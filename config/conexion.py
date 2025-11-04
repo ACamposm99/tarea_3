@@ -22,7 +22,7 @@ def verify_user(username, password):
     if conn:
         try:
             cursor = conn.cursor(dictionary=True)
-            cursor.execute("SELECT * FROM Usuario WHERE usuario = %s", (username,))
+            cursor.execute("SELECT * FROM usuario WHERE usuario = %s", (username,))
             user = cursor.fetchone()
             
             if user:
