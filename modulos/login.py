@@ -1,15 +1,27 @@
+import streamlit as st
+from config.conexion import verify_user
+
 def show_login():
-    # Formulario de login
+    """Muestra el formulario de login y maneja la autenticación"""
+    st.title("🔐 Sistema de Gestión - Login")
+    
     with st.form("login_form"):
-        username = st.text_input("Usuario")
-        password = st.text_input("Contraseña", type="password")
+        username = st.text_input("Usuario", placeholder="Ingrese su usuario")
+        password = st.text_input("Contraseña", type="password", placeholder="Ingrese su contraseña")
+        submit = st.form_submit_button("Iniciar Sesión")
         
-        if st.form_submit_button("Iniciar Sesión"):
-            user = verify_user(username, password)  # Función de BD
-            
+        if submit:
+            if not username or not password:
+                st.error("❌ Por favor ingrese usuario y contraseña")
+                return False
+                
+            user = verify_user(username, password)
             if user:
-                # Configurar sesión
                 st.session_state.logged_in = True
                 st.session_state.user = user
-                st.success(f"Bienvenido {user['usuario']}!")
-                st.rerun()  # Recargar aplicación
+                st.success(f"✅ Bienvenido {user['usuario']}!")
+                st.rerun()
+            else:
+                st.error("❌ Usuario o contraseña incorrectos")
+                
+    return st.session_state.get('logged_in', False)
